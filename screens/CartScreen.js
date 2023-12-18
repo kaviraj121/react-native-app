@@ -40,8 +40,11 @@ const CartScreen = ({ navigation }) => {
         </View>
       </View>
       <Text style={styles.itemPrice}>${item.price * item.quantity}</Text>
-      <TouchableOpacity onPress={() => removeFromCart(item.id)}>
-        <Text style={styles.removeButton}>Remove</Text>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => removeFromCart(item.id)}
+      >
+        <Text style={styles.removeButtonText}>Remove</Text>
       </TouchableOpacity>
     </View>
   );
@@ -79,6 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 16,
+    paddingTop:50,
   },
   cartItem: {
     flexDirection: 'row',
@@ -108,6 +112,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center', // Center the quantity buttons
+  },
   quantityButton: {
     fontSize: 20,
     paddingHorizontal: 8,
@@ -117,6 +126,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginHorizontal: 8,
   },
+  removeButton: {
+    backgroundColor: 'red',
+    padding: 8,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  removeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+
   itemPrice: {
     fontSize: 16,
     fontWeight: 'bold',

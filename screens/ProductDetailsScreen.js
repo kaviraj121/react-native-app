@@ -4,12 +4,15 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'rea
 import Icon from 'react-native-vector-icons/FontAwesome5'; // Import FontAwesome5 icon from react-native-vector-icons
 import axios from 'axios';
 import { useCart } from '../CartContext'; 
+import { useFavorites } from '../FavoritesContext';
 
 const ProductDetailsScreen = ({ route, navigation }) => {
   const { productId } = route.params;
   const { cart, addToCart } = useCart();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
+
 
   useEffect(() => {
     fetchProductDetails();
@@ -48,9 +51,19 @@ const ProductDetailsScreen = ({ route, navigation }) => {
 
 
   const handleAddToFavorites = () => {
-    // Implement the logic to add the product to favorites
-    console.log('Product added to favorites:', productDetails);
+    if (productDetails) {
+      addToFavorites(productDetails);
+      console.log('Adding to favorites:', productDetails);
+    }
   };
+
+  const handleRemoveFromFavorites = () => {
+    if (productDetails) {
+      removeFromFavorites(productDetails.id);
+    }
+  };
+
+  const isProductInFavorites = favorites.some((item) => item.id === productDetails.id);
 
   if (loading) {
     return (
@@ -81,10 +94,17 @@ const ProductDetailsScreen = ({ route, navigation }) => {
           <Text style={styles.buttonText}>Add to Cart</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleAddToFavorites}>
-          {/* Replace FontAwesome component with Icon component */}
-          <Icon name="heart" size={20} color="#FF5E5B" />
-        </TouchableOpacity>
+        <TouchableOpacity
+  style={styles.button}
+  onPress={isProductInFavorites ? handleRemoveFromFavorites : handleAddToFavorites}
+>
+  {/* Use "FontAwesome5Free-Solid" for filled heart and "FontAwesome5Free-Regular" for outlined heart */}
+  <Icon
+    name={isProductInFavorites ? 'heart' : 'heart-o'}
+    size={20}
+    color={isProductInFavorites ? '#FF5E5B' : '#000'}
+  />
+</TouchableOpacity>
       </View>
 
       {/* <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -103,7 +123,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   productImage: {
-    width: 300,
+    width: 400 ,
     height: 300,
     resizeMode: 'cover',
   },
